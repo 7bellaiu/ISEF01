@@ -6,6 +6,8 @@
     <title>Quizius Maximus</title>
     <!-- CSS Framework -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="custom.css" rel="stylesheet">
+
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/10.13.2/firebase-app-compat.js"></script>
     <!-- include only the Firebase features as you need -->
@@ -27,9 +29,31 @@
     <script defer src="https://unpkg.com/petite-vue@0.4.1"></script>
   </head>
   <body>
-    <h1>Willkommen bei Quizius Maximus</h1>
-    <div id="content"></div>
-    <button onclick="googleLogin()">Mit Google Einloggen</button>
-    <script src="app.js"></script>
-  </body>
+    <nav class="navbar bg-dark border-bottom sticky-top" data-bs-theme="dark">
+      <div class="container-fluid">
+        <!-- Logo & Name oben links -->
+        <a class="navbar-brand" href="/index.html">
+          <img src="logo_placeholder.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+          <span class="p-1">Quizius Maximus</span>
+        </a>
+      </div>
+    </nav>
+
+    <main>
+      <h1>Willkommen bei Quizius Maximus</h1>
+      <div id="content"></div>
+      <button onclick="googleLogin()">Mit Google Einloggen</button>
+      <script src="app.js"></script>
+    </main>
+
+    <footer class="footer bg-dark">
+      <ul class="nav justify-content-center border-bottom m-3 d-none d-lg-flex">
+          <li class="nav-item"><a href="index.html" class="nav-link px-2 text-white">Startseite</a></li>
+          <li class="nav-item"><a href="/sites/privacy_policy.html"
+                  class="nav-link px-2 text-white">Datenschutzerklärung</a></li>
+          <li class="nav-item"><a href="/sites/impressum.html" class="nav-link px-2 text-white">Impressum</a></li>
+      </ul>
+      <p class="text-center text-white m-3 p-2">© 2024 Quizius Maximus</p>
+    </footer>
+    </body>
 </html>
