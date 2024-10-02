@@ -7,8 +7,13 @@ document.addEventListener("DOMContentLoaded", event => {
     myPost.get()
             .then(doc => {
                 const data = doc.data();
-                document.write(data.name + `<br>`);
-                document.write(data.description);
+                const contentElement = document.getElementById("content");
+                const nameElement = document.createElement("p");
+                const descriptionElement = document.createElement("p");
+                nameElement.textContent = data.name;
+                descriptionElement.textContent = data.description;
+                contentElement.appendChild(nameElement);
+                contentElement.appendChild(descriptionElement);
             })
             
 });
