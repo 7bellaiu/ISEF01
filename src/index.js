@@ -1,3 +1,6 @@
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs, doc } from 'firebase/firestore';
+
 const firebaseConfig = {
     apiKey: "AIzaSyARCmMDIU5LPjBMj_v_tYrhcUh8Aloynpo",
     authDomain: "isef01-quizius-maximus-v2.firebaseapp.com",
@@ -5,6 +8,9 @@ const firebaseConfig = {
     storageBucket: "isef01-quizius-maximus-v2.appspot.com",
     messagingSenderId: "555791080708",
     appId: "1:555791080708:web:c890c0d237eb00c2764451"
-  };
+};
 
-  
+const app = initializeApp(firebaseConfig);
+
+console.log(app);
+
