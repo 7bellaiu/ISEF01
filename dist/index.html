@@ -1,13 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    <h1>hi</h1>
+    <h1>Fragenkatalog-Verwaltung</h1>
+
+    <h2>Fragenkatalog anlegen</h2>
+    <form class="add">
+        <label for="module_id">Modulkürzel:</label>
+        <input type="text" name="module_id" required>
+        <label for="module_name">Modulname:</label>
+        <input type="text" name="module_name" required>
+
+        <button>Fragenkatalog anlegen</button>
+    </form>
+
+    <hr>
+
+    <h2>Fragenkatalog löschen</h2>
+    <form class="delete">
+        <label for="id">Document id:</label>
+        <input type="text" name="id" required>
+
+        <button>Fragenkatalog löschen</button>
+    </form>
 
     <script src="bundle.js"></script>
 </body>
+
 </html>
