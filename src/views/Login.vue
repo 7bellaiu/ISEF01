@@ -15,7 +15,7 @@ const password = ref("");
 const toastMessage = ref("");
 const toastVariant = ref("");
 const userLoggedIn = ref(false);
-const userName = ref("");
+// const userName = ref("");
 
 /** check whether user is logged in when loading this view*/
 onMounted(() => {
@@ -24,7 +24,7 @@ onMounted(() => {
             userLoggedIn.value = false;
         } else {
             userLoggedIn.value = true;
-            userName.value = user.email;
+            // userName.value = user.email;
             router.push("/");
         }
     });
@@ -80,12 +80,12 @@ const triggerToast = () => {
             <!-- Toast Success/Failure -->
             <Toast ref="toastRef" :message="toastMessage" :variant="toastVariant" />
         </div>
-
+        <!-- 
         <fieldset v-else>
             <legend>Welcome {{ userName }}!</legend>
             <div class="d-flex justify-content-center">
                 <button @click="signOut(getAuth());" class="btn btn-danger w-100">Logout</button>
             </div>
-        </fieldset>
+        </fieldset> -->
     </main>
 </template>
