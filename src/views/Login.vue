@@ -25,6 +25,7 @@ onMounted(() => {
         } else {
             userLoggedIn.value = true;
             userName.value = user.email;
+            router.push("/");
         }
     });
 });
