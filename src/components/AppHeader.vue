@@ -42,7 +42,7 @@ onMounted(() => {
                 <div v-else class="dropdown text-end">
                     <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="../assets/logo.PNG" class="bg-secondary logo-img" />
+                        <AppLogo />
                     </a>
                     <ul class="dropdown-menu text-small">
                         <li>
