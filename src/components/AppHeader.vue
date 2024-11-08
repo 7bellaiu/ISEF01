@@ -22,70 +22,26 @@ onMounted(() => {
 </script>
 
 <template>
-    <header class="p-3 text-bg-dark">
-        <section class="row align-items-center justify-items-center">
-            <div class="col-3">
-                <a href="/">
-                    <AppLogo />
-                </a>
-            </div>
-            <div class="col-6 text-center">
-                <a href="/" class="text-decoration-none">
-                    <span class="text-white p-1 h2">Quiz<span class="text-primary">iu</span>s Maximus</span>
-                </a>
-            </div>
-            <div class="col-3">
-                <div v-if="!userLoggedIn" class="text-end">
-                    <router-link type="button" class="btn btn-outline-primary" to="/register">Register</router-link>
-                </div>
-
-                <div v-else class="dropdown text-end">
-                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <AppLogo />
-                    </a>
-                    <ul class="dropdown-menu text-small">
-                        <li>
-                            <router-link class="dropdown-item" to="/">Home</router-link>
-                        </li>
-                        <li>
-                            <router-link class="dropdown-item" to="/">Gamemodes</router-link>
-                        </li>
-                        <li>
-                            <router-link class="dropdown-item" to="/">Questionnaires</router-link>
-                        </li>
-                        <li>
-                            <router-link class="dropdown-item" to="/">Stats</router-link>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider" />
-                        </li>
-                        <li>
-                            <router-link class="dropdown-item" to="/">Edit Profile</router-link>
-                        </li>
-                        <li>
-                            <button class="dropdown-item" @click="signOut(getAuth());">Sign out</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+    <header class="navbar bg-dark p-2" data-bs-theme="dark">
+        <a href="/">
+            <AppLogo />
+        </a>
+        <a href="/" class="text-decoration-none">
+            <span class="text-white p-1 h2">Quiz<span class="text-primary">iu</span>s Maximus</span>
+        </a>
+        <div class="dropdown">
+            <button class="btn btn-dark navbar-toggler" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><router-link class="dropdown-item" to="/">My Profile</router-link></li>
+                <li><router-link class="dropdown-item" to="/">Play Quiz</router-link></li>
+                <li><router-link class="dropdown-item" to="/">Help & Contact</router-link></li>
+                <li>
+                    <hr class="dropdown-divider" />
+                </li>
+                <li><button class="dropdown-item" @click="signOut(getAuth());">Sign out</button></li>
+            </ul>
+        </div>
     </header>
 </template>
-
-<style scoped>
-.logo-img {
-    width: 15%;
-    /* Relative Breite */
-    height: auto;
-    /* Erhält das Seitenverhältnis */
-    min-width: 40px;
-    /* Minimale Breite */
-    max-width: 80px;
-    /* Maximale Breite */
-    min-height: 40px;
-    /* Minimale Höhe */
-    max-height: 80px;
-    /* Maximale Höhe */
-}
-</style>
