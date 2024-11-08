@@ -29,7 +29,10 @@ onMounted(() => {
         <a href="/" class="text-decoration-none">
             <span class="text-white p-1 h2">Quiz<span class="text-primary">iu</span>s Maximus</span>
         </a>
-        <div class="dropdown">
+        <div v-if="!userLoggedIn" class="dropdown">
+            <router-link type="button" class="btn btn-outline-primary" to="/register">Register</router-link>
+        </div>
+        <div v-else>
             <button class="btn btn-dark navbar-toggler" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -45,3 +48,4 @@ onMounted(() => {
         </div>
     </header>
 </template>
+
