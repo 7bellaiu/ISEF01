@@ -87,11 +87,5 @@ const triggerToast = () => {
             <!-- Erfolgs-/Fehlermeldung -->
             <Toast ref="toastRef" :message="toastMessage" :variant="toastVariant" />
         </div>
-        <!-- <fieldset v-else>
-            <legend>Welcome {{ userName }}!</legend>
-            <div class="d-flex justify-content-center">
-                <button @click="signOut(getAuth());" class="btn btn-danger w-100">Logout</button>
-            </div>
-        </fieldset> -->
     </main>
 </template>
