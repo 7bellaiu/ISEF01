@@ -25,21 +25,18 @@ onMounted(() => {
     <header class="p-3 text-bg-dark">
         <section class="row align-items-center justify-items-center">
             <div class="col-3">
-                <a href="/" class="mb-2 mb-lg-0">
+                <a href="/">
                     <AppLogo />
                 </a>
             </div>
             <div class="col-6 text-center">
-                <a href="/" class="mb-2 mb-lg-0 text-decoration-none">
+                <a href="/" class="text-decoration-none">
                     <span class="text-white p-1 h2">Quiz<span class="text-primary">iu</span>s Maximus</span>
                 </a>
             </div>
             <div class="col-3">
                 <div v-if="!userLoggedIn" class="text-end">
-                    <div class="btn-group">
-                        <router-link type="button" class="btn btn-outline-primary" to="/login">Login</router-link>
-                        <router-link type="button" class="btn btn-primary" to="/register">Register</router-link>
-                    </div>
+                    <router-link type="button" class="btn btn-outline-primary" to="/register">Register</router-link>
                 </div>
 
                 <div v-else class="dropdown text-end">
