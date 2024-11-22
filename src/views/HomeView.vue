@@ -20,13 +20,13 @@ onMounted(() => {
 });
 </script>
 
-<!-- TODO: Alle Texte Deutsch-->
 <template>
     <main class="d-flex justify-content-center">
         <fieldset v-if="userLoggedIn">
-            <legend>Welcome back {{ userName }}!</legend>
+            <legend>Willkommen zurück {{ userName }}!</legend>
             <div class="d-flex justify-content-center">
-                <button @click="signOut(getAuth());" class="btn btn-danger w-50">Logout</button>
+                <!-- TODO: Eigene Komponente for Logout-Button -->
+                <button @click="signOut(getAuth());" class="btn btn-danger w-50">Ausloggen</button>
             </div>
         </fieldset>
     </main>

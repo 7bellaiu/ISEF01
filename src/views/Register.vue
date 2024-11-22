@@ -61,14 +61,13 @@ const triggerToast = () => {
 };
 </script>
 
-<!-- TODO: Alle Texte Deutsch-->
 <template>
     <main class="d-flex justify-content-center">
         <div v-if="!userLoggedIn" class="p-3 mt-3 mb-3" style="width: 100%; max-width: 400px">
             <!-- Logo -->
             <AppLogo variant="light"/>
             <!-- Titel -->
-            <h2 class="mb-3">Please register</h2>
+            <h2 class="mb-3">Bitte registrieren</h2>
 
             <!-- Login-Formular -->
             <form @submit.prevent="register" class="bg-body-tertiary">
@@ -81,7 +80,7 @@ const triggerToast = () => {
                         data-ddg-inputtype="credentials.password.current" v-model="password" required />
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button class="btn btn-primary w-100">Register</button>
+                    <button class="btn btn-primary w-100">Registrieren</button>
                 </div>
             </form>
 

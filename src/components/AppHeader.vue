@@ -21,7 +21,6 @@ onMounted(() => {
 });
 </script>
 
-<!-- TODO: Alle Texte DEUTSCH-->
 <template>
     <header class="navbar bg-dark p-2 d-flex justify-content-between" data-bs-theme="dark">
         <a href="/">
@@ -31,20 +30,21 @@ onMounted(() => {
             <span class="text-white p-1 h2">Quiz<span class="text-primary">iu</span>s Maximus</span>
         </a>
         <div v-if="!userLoggedIn" class="dropdown">
-            <router-link type="button" class="btn btn-outline-primary" to="/register">Register</router-link>
+            <router-link type="button" class="btn btn-outline-primary" to="/register">Registrieren</router-link>
         </div>
         <div v-else>
             <button class="btn btn-dark navbar-toggler" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><router-link class="dropdown-item" to="/">My Profile</router-link></li>
-                <li><router-link class="dropdown-item" to="/">Play Quiz</router-link></li>
-                <li><router-link class="dropdown-item" to="/">Help & Contact</router-link></li>
+                <li><router-link class="dropdown-item" to="/">Mein Profil</router-link></li>
+                <li><router-link class="dropdown-item" to="/">Quiz starten</router-link></li>
+                <li><router-link class="dropdown-item" to="/">Hilfe & Kontakt</router-link></li>
                 <li>
                     <hr class="dropdown-divider" />
                 </li>
-                <li><button class="dropdown-item" @click="signOut(getAuth());">Sign out</button></li>
+                <!-- TODO: Eigene Komponente for Logout-Button -->
+                <li><button class="dropdown-item" @click="signOut(getAuth());">Ausloggen</button></li>
             </ul>
         </div>
     </header>
