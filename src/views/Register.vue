@@ -61,11 +61,12 @@ const triggerToast = () => {
 };
 </script>
 
+<!-- TODO: Alle Texte Deutsch-->
 <template>
     <main class="d-flex justify-content-center">
         <div v-if="!userLoggedIn" class="p-3 mt-3 mb-3" style="width: 100%; max-width: 400px">
             <!-- Logo -->
-            <AppLogo />
+            <AppLogo variant="light"/>
             <!-- Titel -->
             <h2 class="mb-3">Please register</h2>
 

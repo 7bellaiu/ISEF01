@@ -20,6 +20,7 @@ onMounted(() => {
 });
 </script>
 
+<!-- TODO: Alle Texte Deutsch-->
 <template>
     <main class="d-flex justify-content-center">
         <fieldset v-if="userLoggedIn">

@@ -28,6 +28,8 @@ const showToast = () => {
 defineExpose({ showToast });
 </script>
 
+<!-- TODO: Alle Texte Deutsch-->
+
 <template>
     <div v-if="isVisible" :class="[
         'toast',

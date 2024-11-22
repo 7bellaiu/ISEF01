@@ -21,10 +21,11 @@ onMounted(() => {
 });
 </script>
 
+<!-- TODO: Alle Texte DEUTSCH-->
 <template>
-    <header class="navbar bg-dark p-2" data-bs-theme="dark">
+    <header class="navbar bg-dark p-2 d-flex justify-content-between" data-bs-theme="dark">
         <a href="/">
-            <AppLogo />
+            <AppLogo variant="dark"/>
         </a>
         <a href="/" class="text-decoration-none">
             <span class="text-white p-1 h2">Quiz<span class="text-primary">iu</span>s Maximus</span>
