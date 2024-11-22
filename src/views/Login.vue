@@ -4,6 +4,7 @@ import { ref, onMounted } from "vue";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useRouter } from "vue-router";
 import Toast from "@/components/Toast.vue";
+import AppLogo from "@/components/AppLogo.vue";
 
 /** COMPONENT REFERENCES */
 const router = useRouter();
@@ -58,9 +59,9 @@ const triggerToast = () => {
     <main class="d-flex justify-content-center">
         <div v-if="!userLoggedIn" class="p-3 mt-3 mb-3" style="width: 100%; max-width: 400px">
             <!-- Logo -->
-            <img src="../assets/logo.jpeg" alt="Logo" class="mb-3" width="55%" height="25%" />
+            <AppLogo variant="light"/>
             <!-- Titel -->
-            <h2 class="mb-3">Please sign in</h2>
+            <h2 class="mb-3">Bitte einloggen</h2>
 
             <!-- Login-Formular -->
             <form @submit.prevent="logIn" class="bg-body-tertiary">
@@ -73,19 +74,12 @@ const triggerToast = () => {
                         data-ddg-inputtype="credentials.password.current" v-model="password" required />
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button class="btn btn-primary w-100">Login</button>
+                    <button class="btn btn-primary w-100">Einloggen</button>
                 </div>
             </form>
 
             <!-- Toast Success/Failure -->
             <Toast ref="toastRef" :message="toastMessage" :variant="toastVariant" />
         </div>
-        <!-- 
-        <fieldset v-else>
-            <legend>Welcome {{ userName }}!</legend>
-            <div class="d-flex justify-content-center">
-                <button @click="signOut(getAuth());" class="btn btn-danger w-100">Logout</button>
-            </div>
-        </fieldset> -->
     </main>
 </template>

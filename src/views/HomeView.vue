@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import router from '@/router';
+import LogoutButton from '@/components/LogoutButton.vue';
 
 const userLoggedIn = ref(false);
 const userName = ref("");
@@ -23,9 +24,9 @@ onMounted(() => {
 <template>
     <main class="d-flex justify-content-center">
         <fieldset v-if="userLoggedIn">
-            <legend>Welcome back {{ userName }}!</legend>
+            <legend>Willkommen zurück {{ userName }}!</legend>
             <div class="d-flex justify-content-center">
-                <button @click="signOut(getAuth());" class="btn btn-danger w-50">Logout</button>
+                <LogoutButton />
             </div>
         </fieldset>
     </main>
