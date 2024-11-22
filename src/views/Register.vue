@@ -11,12 +11,14 @@ const router = useRouter();
 const toastRef = ref(null);
 
 /** STATES */
+const userName = ref(""); //kein Vor- & Nachname, wegen Datenschutz (pers.bez. Daten)
 const email = ref("");
 const password = ref("");
+const passwordRepeat = ref("");
 const toastMessage = ref("");
 const toastVariant = ref("");
 const userLoggedIn = ref(false);
-// const userName = ref("");
+const acceptTermsAndPrivacy = ref(false);
 
 /** check whether user is logged in when loading this view*/
 onMounted(() => {
@@ -32,6 +34,9 @@ onMounted(() => {
 });
 
 const register = () => {
+    // TODO: Validation of Passwords
+    // TODO: Validation of Username
+    // TODO: Validation of Terms & Conditions && Privacy Policy
     createUserWithEmailAndPassword(getAuth(), email.value, password.value)
         .then((data) => {
             toastMessage.value = "Registration was successfull!";
@@ -71,6 +76,7 @@ const triggerToast = () => {
 
             <!-- Login-Formular -->
             <form @submit.prevent="register" class="bg-body-tertiary">
+                <!-- TODO: Username Input -->
                 <div class="mb-2">
                     <input type="email" class="form-control" id="email" placeholder="Email address"
                         data-ddg-inputtype="credentials.username" v-model="email" required />
@@ -79,9 +85,12 @@ const triggerToast = () => {
                     <input type="password" class="form-control" id="password" placeholder="Password"
                         data-ddg-inputtype="credentials.password.current" v-model="password" required />
                 </div>
+                <!-- TODO: Repeat Password -->
+                <!-- TODO: Checkbox Agree T&C + PrivPol -->
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-primary w-100">Registrieren</button>
                 </div>
+                <!-- TODO: Add Textbox with Link to Home-View for Login -->
             </form>
 
             <!-- Erfolgs-/Fehlermeldung -->
