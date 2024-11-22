@@ -1,8 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import router from '@/router';
 import AppLogo from './AppLogo.vue';
+import LogoutButton from './LogoutButton.vue';
 
 const userLoggedIn = ref(false);
 const userName = ref("");
@@ -43,8 +44,9 @@ onMounted(() => {
                 <li>
                     <hr class="dropdown-divider" />
                 </li>
-                <!-- TODO: Eigene Komponente for Logout-Button -->
-                <li class="d-flex justify-content-center"><button class="btn btn-outline-danger" @click="signOut(getAuth());">Ausloggen</button></li>
+                <li class="d-flex justify-content-center">
+                     <LogoutButton />
+                </li>
             </ul>
         </div>
     </header>
