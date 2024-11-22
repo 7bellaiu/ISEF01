@@ -26,7 +26,7 @@ onMounted(() => {
             <legend>Willkommen zurück {{ userName }}!</legend>
             <div class="d-flex justify-content-center">
                 <!-- TODO: Eigene Komponente for Logout-Button -->
-                <button @click="signOut(getAuth());" class="btn btn-danger w-50">Ausloggen</button>
+                <button @click="signOut(getAuth());" class="btn btn-outline-danger">Ausloggen</button>
             </div>
         </fieldset>
     </main>

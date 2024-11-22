@@ -36,7 +36,7 @@ onMounted(() => {
             <button class="btn btn-dark navbar-toggler" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
+            <ul class="dropdown-menu dropdown-menu-end  text-center">
                 <li><router-link class="dropdown-item" to="/">Mein Profil</router-link></li>
                 <li><router-link class="dropdown-item" to="/">Quiz starten</router-link></li>
                 <li><router-link class="dropdown-item" to="/">Hilfe & Kontakt</router-link></li>
@@ -44,7 +44,7 @@ onMounted(() => {
                     <hr class="dropdown-divider" />
                 </li>
                 <!-- TODO: Eigene Komponente for Logout-Button -->
-                <li><button class="dropdown-item" @click="signOut(getAuth());">Ausloggen</button></li>
+                <li class="d-flex justify-content-center"><button class="btn btn-outline-danger" @click="signOut(getAuth());">Ausloggen</button></li>
             </ul>
         </div>
     </header>
