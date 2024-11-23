@@ -30,7 +30,7 @@ const top3Modules = computed(() => {
 
 <template>
   <main>
-    <section class="py-2 text-center container">
+    <section class="py-4 text-center container">
       <div class="row py-lg-3">
         <div class="col-lg-6 col-md-8 mx-auto">
           <h1 class="fw-light">Module</h1>
