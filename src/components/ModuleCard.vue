@@ -15,33 +15,20 @@ const props = defineProps({
 });
 </script>
 
-<!-- TODO: Hier Bootstrap reinbringen entsprechend Wireframe -->
 <template>
-    <div class="card">
-        <div class="card-text">
-            <h2>{{ props.shortname }}</h2>
-            <p>{{ props.longname }}</p>
-            <p>{{ props.moduleid }}</p>
+    <div class="col">
+        <div class="card shadow-sm border-primary border-opacity-25">
+            <div class="card-header text-bg-primary border-primary border-opacity-25 bg-opacity-75">
+                {{ props.shortname }}: {{ props.moduleid }}
+            </div>
+            <div class="card-body bg-primary bg-opacity-10">
+                <h6 class="card-subtitle">{{ props.longname }}</h6>
+                <p class="card-text">Hier könnte zusätzlich noch ein Beschreibungstext rein.</p>
+                <div class="d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn btn-sm btn-outline-danger w-25 mx-2">PvP</button>
+                    <button type="button" class="btn btn-sm btn-outline-success w-25 mx-2">Koop</button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
-
-<style scoped>
-.card {
-    width: 310px;
-    overflow: hidden;
-    border-radius: 2%;
-    box-shadow: 1px 1px 10px rgb(0, 0, 0, 0.1);
-    margin-bottom: 35px;
-    margin-right: 20px;
-    cursor: pointer;
-}
-
-.card .card-text {
-    padding: 0 5px;
-}
-
-.card .card-text h2 {
-    font-weight: bold;
-}
-</style>

@@ -5,7 +5,6 @@ import ModuleCard from '@/components/ModuleCard.vue';
 
 const modules = ref([]);
 const search = ref("");
-const top3Names = ref([]);
 
 onMounted(() => {
   getDocs(collection(getFirestore(), 'module'))
@@ -56,27 +55,9 @@ const top3Modules = computed(() => {
     </section>
     <section class="album py-3 container">
       <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 g-3">
-        <div v-for="module in filteredModules" :moduleid="module.id" :shortname="module.shortname" class="col">
-          <div class="card shadow-sm border-primary border-opacity-25">
-            <div class="card-header text-bg-primary border-primary border-opacity-25 bg-opacity-75">{{ module.shortname
-              }}</div>
-            <div class="card-body bg-primary bg-opacity-10">
-              <h6 class="card-subtitle">{{ module.longname }}</h6>
-              <p class="card-text">Hier könnte zusätzlich noch ein Beschreibungstext rein.</p>
-              <div class="d-flex justify-content-center align-items-center">
-                <button type="button" class="btn btn-sm btn-outline-danger w-25 mx-2">PvP</button>
-                <button type="button" class="btn btn-sm btn-outline-success w-25 mx-2">Koop</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ModuleCard v-for="module in filteredModules" :moduleid="module.id" :shortname="module.shortname"
+          :longname="module.longname" />
       </div>
     </section>
   </main>
 </template>
-
-<style scoped>
-.card {
-  max-width: 30rem;
-}
-</style>
