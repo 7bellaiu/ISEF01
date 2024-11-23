@@ -9,6 +9,7 @@ const userLoggedIn = ref(false);
 const userName = ref("");
 
 /** check whether user is logged in when loading this view*/
+// TODO: Reicht dieser Code-Part evtl hier oder in App.vue?
 onMounted(() => {
     onAuthStateChanged(getAuth(), function (user) {
         if (!user) {

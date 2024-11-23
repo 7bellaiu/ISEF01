@@ -1,5 +1,4 @@
 <script setup>
-import { defineProps } from 'vue';
 const props = defineProps({
     moduleid: {
         type: String,
@@ -16,12 +15,13 @@ const props = defineProps({
 });
 </script>
 
+<!-- TODO: Hier Bootstrap reinbringen entsprechend Wireframe -->
 <template>
     <div class="card">
         <div class="card-text">
             <h2>{{ props.shortname }}</h2>
-          <p>{{ props.longname }}</p>
-          <p>{{ props.moduleid }}</p>
+            <p>{{ props.longname }}</p>
+            <p>{{ props.moduleid }}</p>
         </div>
     </div>
 </template>
@@ -29,7 +29,6 @@ const props = defineProps({
 <style scoped>
 .card {
     width: 310px;
-
     overflow: hidden;
     border-radius: 2%;
     box-shadow: 1px 1px 10px rgb(0, 0, 0, 0.1);
