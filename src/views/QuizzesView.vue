@@ -2,11 +2,19 @@
 import { ref, onMounted, computed } from 'vue';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import ModuleCard from '@/components/ModuleCard.vue';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const modules = ref([]);
 const search = ref("");
 
 onMounted(() => {
+  /** check whether user is logged in when loading this view*/
+  onAuthStateChanged(getAuth(), function (user) {
+    if (!user) {
+      router.push("/");
+    }
+  });
+
   getDocs(collection(getFirestore(), 'module'))
     .then((moduleSnapshot) => {
       modules.value = moduleSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -61,11 +69,11 @@ const top3Modules = computed(() => {
                   d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5">
                 </path>
               </svg>
-            </span> startet ein Quiz als 
+            </span> startet ein Quiz als
             <span class="text-success">
               2er Team
             </span>
-            
+
           </p>
         </div>
       </div>
