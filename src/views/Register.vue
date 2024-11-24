@@ -160,7 +160,7 @@ const triggerToast = () => {
                     </label>
                 </div>
                 <div class="d-flex justify-content-between mt-3">
-                    <a class="btn btn-outline-primary" href="/login"> zur Anmeldung</a>
+                    <router-link class="btn btn-outline-primary" to="/login">zur Anmeldung</router-link>
                     <button class="btn btn-primary w-50" :disabled="!isFormValid">Registrieren</button>
                 </div>
             </form>
