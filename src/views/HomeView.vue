@@ -15,7 +15,9 @@ onMounted(() => {
             router.push("/login");
         } else {
             userLoggedIn.value = true;
-            userName.value = user.email;
+            // TODO: Alternative finden, hier ist der Name leer, weil Profil-Update erst nach Auth-Creation ... onAuthStateChanged triggert schneller
+            // => nach initialer Username-Vergabe leer, ab dann immer gefüllt
+            userName.value = user.displayName;
         }
     });
 });

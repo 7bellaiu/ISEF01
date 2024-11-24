@@ -28,7 +28,7 @@ onMounted(() => {
         <a href="/">
             <AppLogo variant="dark"/>
         </a>
-        <a href="/" class="text-decoration-none">
+        <a href="/" class="text-decoration-none" id="quizius-maximus">
             <span class="text-white p-1 h2">Quiz<span class="text-primary">iu</span>s Maximus</span>
         </a>
         <div v-if="!userLoggedIn" class="dropdown">
@@ -53,3 +53,8 @@ onMounted(() => {
     </header>
 </template>
 
+<style scoped>
+#quizius-maximus {
+    font-family: fantasy;
+}
+</style>

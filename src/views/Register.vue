@@ -1,24 +1,27 @@
 <script setup>
 /** IMPORTS */
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
-import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, updateProfile, signOut } from "firebase/auth";
 import Toast from "@/components/Toast.vue";
-import AppLogo from "@/components/AppLogo.vue";
 
 /** COMPONENT REFERENCES */
 const router = useRouter();
 const toastRef = ref(null);
 
 /** STATES */
-const userName = ref(""); //kein Vor- & Nachname, wegen Datenschutz (pers.bez. Daten)
+const username = ref("");
 const email = ref("");
-const password = ref("");
-const passwordRepeat = ref("");
+const newPassword = ref("");
+const confirmPassword = ref("");
 const toastMessage = ref("");
 const toastVariant = ref("");
 const userLoggedIn = ref(false);
-const acceptTermsAndPrivacy = ref(false);
+const flexCheckTerms = ref(false);
+const flexCheckPrivacy = ref(false);
+
+// Validation of Terms & Conditions && Privacy Policy
+const isFormValid = computed(() => flexCheckTerms.value && flexCheckPrivacy.value);
 
 /** check whether user is logged in when loading this view*/
 onMounted(() => {
@@ -27,26 +30,52 @@ onMounted(() => {
             userLoggedIn.value = false;
         } else {
             userLoggedIn.value = true;
-            // userName.value = user.email;
             router.push("/");
         }
     });
 });
 
 const register = () => {
-    // TODO: Validation of Passwords
-    // TODO: Validation of Username
-    // TODO: Validation of Terms & Conditions && Privacy Policy
-    createUserWithEmailAndPassword(getAuth(), email.value, password.value)
+    // VALIDATION
+    if (newPassword.value !== confirmPassword.value) {
+        toastMessage.value = "Die eingegebenen Passwörter stimmen nicht überein!";
+        toastVariant.value = "warning"
+        triggerToast();
+        return;
+    }
+    if (!username.value || username.value.trim() === "" || username.value.trim().length < 5) {
+        toastMessage.value = "Bitte geben Sie einen gültigen Benutzernamen ein! (mindestens 5 Zeichen)";
+        toastVariant.value = "warning";
+        triggerToast();
+        return;
+    }
+
+    // USER CREATION
+    createUserWithEmailAndPassword(getAuth(), email.value, newPassword.value)
         .then((data) => {
-            toastMessage.value = "Registration was successfull!";
-            toastVariant.value = "success";
-            triggerToast();
+            const user = data.user;
+
+            // Setze den displayName (Username)
+            updateProfile(user, {
+                displayName: username.value.trim()
+            })
+                .then(() => {
+                    toastMessage.value = "Die Registrierung war erfolgreich!";
+                    toastVariant.value = "success";
+                    triggerToast();
+                })
+                .catch((profileError) => {
+                    console.error('Fehler beim Setzen des Benutzernamens:', profileError);
+                    toastMessage.value = "Registrierung erfolgreich, aber der Benutzername konnte nicht gespeichert werden.";
+                    toastVariant.value = "warning";
+                    triggerToast();
+                });
         })
         .catch((error) => {
+            // Fehler bei der Registrierung
             switch (error.code) {
                 case "auth/weak-password":
-                    toastMessage.value = "Your Password should be at least 6 characters long";
+                    toastMessage.value = "Ihr Passwort muss mindestens 6 Zeichen lang sein.";
                     break;
 
                 default:
@@ -69,28 +98,71 @@ const triggerToast = () => {
 <template>
     <main class="d-flex justify-content-center">
         <div v-if="!userLoggedIn" class="p-3 mt-3 mb-3" style="width: 100%; max-width: 400px">
-            <!-- Logo -->
-            <AppLogo variant="light"/>
-            <!-- Titel -->
-            <h2 class="mb-3">Bitte registrieren</h2>
+            <h2 class="mb-3 text-center">Registrieren</h2>
 
-            <!-- Login-Formular -->
-            <form @submit.prevent="register" class="bg-body-tertiary">
-                <!-- TODO: Username Input -->
-                <div class="mb-2">
-                    <input type="email" class="form-control" id="email" placeholder="Email address"
-                        data-ddg-inputtype="credentials.username" v-model="email" required />
+            <form @submit.prevent="register">
+                <div class="input-group mb-2">
+                    <div class="input-group-text" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-person" viewBox="0 0 16 16">
+                            <path
+                                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+                        </svg>
+                    </div>
+                    <input type="text" class="form-control" id="username" placeholder="Benutzername" aria-label="Benutzername"
+                        data-ddg-inputtype="credentials.username" v-model="username" required>
                 </div>
-                <div class="mb-3">
-                    <input type="password" class="form-control" id="password" placeholder="Password"
-                        data-ddg-inputtype="credentials.password.current" v-model="password" required />
+                <div class="input-group mb-2">
+                    <div class="input-group-text" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-envelope" viewBox="0 0 16 16">
+                            <path
+                                d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
+                        </svg>
+                    </div>
+                    <input type="email" class="form-control" id="email" placeholder="E-Mail" aria-label="E-Mail"
+                        data-ddg-inputtype="credentials.email" v-model="email" required />
                 </div>
-                <!-- TODO: Repeat Password -->
-                <!-- TODO: Checkbox Agree T&C + PrivPol -->
-                <div class="d-flex justify-content-center">
-                    <button class="btn btn-primary w-100">Registrieren</button>
+                <div class="input-group mb-2">
+                    <div class="input-group-text" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-lock" viewBox="0 0 16 16">
+                            <path
+                                d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1" />
+                        </svg>
+                    </div>
+                    <input type="password" class="form-control" id="newPassword" placeholder="Passwort" aria-label="Passwort"
+                        data-ddg-inputtype="credentials.password.new" v-model="newPassword" required />
                 </div>
-                <!-- TODO: Add Textbox with Link to Home-View for Login -->
+                <div v-if="newPassword.trim() !== ''" class="input-group mb-2">
+                    <div class="input-group-text" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-lock" viewBox="0 0 16 16">
+                            <path
+                                d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1" />
+                        </svg>
+                    </div>
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="Passwort bestätigen" aria-label="Passwort bestätigen"
+                        data-ddg-inputtype="credentials.password.confirmation" v-model="confirmPassword" required />
+                </div>
+                <div v-if="confirmPassword.trim() !== ''" class="form-check mx-1">
+                    <input class="form-check-input" type="checkbox" v-model="flexCheckTerms" id="flexCheckTerms"
+                        required>
+                    <label class="form-check-label" for="flexCheckTerms">
+                        Ich stimme den <a href="">Nutzungsbedingungen</a> zu.
+                    </label>
+                </div>
+                <div v-if="flexCheckTerms" class="form-check mx-1">
+                    <input class="form-check-input" type="checkbox" v-model="flexCheckPrivacy" id="flexCheckPrivacy"
+                        required>
+                    <label class="form-check-label" for="flexCheckPrivacy">
+                        Ich habe die <a href="">Datenschutzerklärung</a> gelesen.
+                    </label>
+                </div>
+                <div class="d-flex justify-content-between mt-3">
+                    <a class="btn btn-outline-primary" href="/login"> zur Anmeldung</a>
+                    <button class="btn btn-primary w-50" :disabled="!isFormValid">Registrieren</button>
+                </div>
             </form>
 
             <!-- Erfolgs-/Fehlermeldung -->
