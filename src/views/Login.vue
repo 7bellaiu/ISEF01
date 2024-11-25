@@ -36,10 +36,11 @@ onMounted(() => {
 const logIn = () => {
     signInWithEmailAndPassword(getAuth(), email.value, currentPassword.value)
         .then((data) => {
+            // TODO: rausnehmen? Router pusht sowieso auf '/' ergibt hier also eigtl. keinen Sinn
             //console.log("Successfully logged in!", data);
-            toastMessage.value = "Login was successfull!";
-            toastVariant.value = "success";
-            triggerToast();
+            // toastMessage.value = "Login was successfull!";
+            // toastVariant.value = "success";
+            // triggerToast();
         })
         .catch((error) => {
             toastMessage.value = "Login failed!";   //give no information bc hackers

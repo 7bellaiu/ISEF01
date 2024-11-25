@@ -1,5 +1,5 @@
 <script setup>
-import { getAuth, onAuthStateChanged, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
+import { EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
 import { onMounted, ref } from 'vue';
 import Toast from "@/components/Toast.vue";
 
@@ -15,6 +15,7 @@ const username = ref("");
 const currentUsername = ref("");
 const email = ref("");
 const currentEmail = ref("");
+const currentPassword = ref("");
 const newPassword = ref("");
 const confirmPassword = ref("");
 
@@ -41,19 +42,41 @@ const updateProfile = () => {
             triggerToast();
             return;
         } else {
-            console.log(getAuth().currentUser);
-            updatePassword(getAuth().currentUser, newPassword.value)
-                .catch((error) => {
-                    // TODO: Eingabefeld 'aktuelles Passwort' --> reauthenticateWithCredential vor updatePassword
-                    switch (error.code) {
-                        case "auth/requires-recent-login":
-                            toastMessage.value = "Um das Passwort zu ändern musst du dich neu anmelden!";
+            // console.log(getAuth().currentUser);
+            // TODO: Eingabefeld 'aktuelles Passwort' --> reauthenticateWithCredential vor updatePassword
+            reauthenticateWithCredential(getAuth().currentUser, EmailAuthProvider.credential(currentEmail.value, currentPassword.value))
+                .then(() => {
+                    console.log('reauthentication succeeded');
+                    updatePassword(getAuth().currentUser, newPassword.value)
+                        .then(() => {
+                            console.log('updatePassword succeeded');
+                            toastMessage.value = 'Das Passwort wurde erfolgreich aktualisiert';
+                            toastVariant.value = "success";
+                            triggerToast();
+                            handleDiscard();
+                        })
+                        .catch((updatePasswordError) => {
+                            console.error('updatePasswordError: ', updatePasswordError);
+                            toastMessage.value = updatePasswordError.code;
+                            toastVariant.value = "danger";
+                            triggerToast();
+                        });
+
+                    // toastMessage.value = 'reauthentication succeeded';
+                    // toastVariant.value = "success";
+                    // triggerToast();
+                })
+                .catch((reauthenticationError) => {
+                    switch (reauthenticationError.code) {
+                        case 'auth/invalid-credential':
+                            toastMessage.value = 'Das eingegebene aktuelle Passwort ist falsch!';
                             break;
 
                         default:
-                            toastMessage.value = error.code;
+                            toastMessage.value = reauthenticationError.code;
                             break;
                     }
+                    console.error('reauthenticationError: ', reauthenticationError);
                     toastVariant.value = "danger";
                     triggerToast();
                 });
@@ -90,6 +113,7 @@ const handleDiscard = () => {
     changePassword.value = false;
     username.value = currentUsername.value;
     email.value = currentEmail.value;
+    currentPassword.value = "";
     newPassword.value = "";
     confirmPassword.value = "";
 };
@@ -135,7 +159,7 @@ const triggerToast = () => {
                         <input type="email" class="form-control" id="email" placeholder="E-Mail" aria-label="E-Mail"
                             data-ddg-inputtype="credentials.email" v-model="email" :disabled="!changeProfileData" />
                     </div>
-                    <!-- new password -->
+                    <!-- current password -->
                     <div v-if="changePassword" class="input-group mb-2">
                         <div class="input-group-text" aria-hidden="true">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -144,8 +168,22 @@ const triggerToast = () => {
                                     d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1" />
                             </svg>
                         </div>
-                        <input type="password" class="form-control" id="newPassword" placeholder="Passwort"
-                            aria-label="Passwort" data-ddg-inputtype="credentials.password.new" v-model="newPassword" />
+                        <input type="password" class="form-control" id="currentPassword"
+                            placeholder="Aktuelles Passwort" aria-label="Aktuelles Passwort"
+                            data-ddg-inputtype="credentials.password.current" v-model="currentPassword" required />
+                    </div>
+                    <!-- new password -->
+                    <div v-if="changePassword && currentPassword.trim() !== ''" class="input-group mb-2">
+                        <div class="input-group-text" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-lock" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1" />
+                            </svg>
+                        </div>
+                        <input type="password" class="form-control" id="newPassword" placeholder="Neues Passwort"
+                            aria-label="Neues Passwort" data-ddg-inputtype="credentials.password.new"
+                            v-model="newPassword" />
                     </div>
                     <!-- confirm new password -->
                     <div v-if="changePassword && newPassword.trim() !== ''" class="input-group mb-2">
@@ -157,7 +195,7 @@ const triggerToast = () => {
                             </svg>
                         </div>
                         <input type="password" class="form-control" id="confirmPassword"
-                            placeholder="Passwort bestätigen" aria-label="Passwort bestätigen"
+                            placeholder="Neues Passwort bestätigen" aria-label="Neues Passwort bestätigen"
                             data-ddg-inputtype="credentials.password.confirmation" v-model="confirmPassword" />
                     </div>
 
