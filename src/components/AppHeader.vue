@@ -6,10 +6,8 @@ import AppLogo from './AppLogo.vue';
 import LogoutButton from './LogoutButton.vue';
 
 const userLoggedIn = ref(false);
-const userName = ref("");
 
 /** check whether user is logged in when loading this view*/
-// TODO: Reicht dieser Code-Part evtl hier oder in App.vue?
 onMounted(() => {
     onAuthStateChanged(getAuth(), function (user) {
         if (!user) {
@@ -17,7 +15,6 @@ onMounted(() => {
             router.push("/login");
         } else {
             userLoggedIn.value = true;
-            userName.value = user.email;
         }
     });
 });
@@ -39,7 +36,7 @@ onMounted(() => {
                 <span class="navbar-toggler-icon"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end  text-center">
-                <li><router-link class="dropdown-item" to="/">Mein Profil</router-link></li>
+                <li><router-link class="dropdown-item" to="/profile">Mein Profil</router-link></li>
                 <li><router-link class="dropdown-item" to="/quizzes">Quiz starten</router-link></li>
                 <li><router-link class="dropdown-item" to="/">Hilfe & Kontakt</router-link></li>
                 <li>
