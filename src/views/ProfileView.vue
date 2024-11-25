@@ -34,6 +34,7 @@ onMounted(() => {
 });
 
 /** HANDLER */
+// TODO: Handling of Bad HTTP Request after Changing PW from current to curren
 const updateProfile = () => {
     if (changePassword) {
         if (newPassword.value !== confirmPassword.value) {
@@ -42,8 +43,6 @@ const updateProfile = () => {
             triggerToast();
             return;
         } else {
-            // console.log(getAuth().currentUser);
-            // TODO: Eingabefeld 'aktuelles Passwort' --> reauthenticateWithCredential vor updatePassword
             reauthenticateWithCredential(getAuth().currentUser, EmailAuthProvider.credential(currentEmail.value, currentPassword.value))
                 .then(() => {
                     console.log('reauthentication succeeded');
@@ -61,10 +60,6 @@ const updateProfile = () => {
                             toastVariant.value = "danger";
                             triggerToast();
                         });
-
-                    // toastMessage.value = 'reauthentication succeeded';
-                    // toastVariant.value = "success";
-                    // triggerToast();
                 })
                 .catch((reauthenticationError) => {
                     switch (reauthenticationError.code) {
@@ -124,7 +119,6 @@ const triggerToast = () => {
         toastRef.value.showToast();
     }
 };
-
 </script>
 
 <template>
