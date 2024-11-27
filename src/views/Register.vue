@@ -75,6 +75,7 @@ const register = () => {
         .catch((error) => {
             // Fehler bei der Registrierung
             switch (error.code) {
+                //TODO: Passwortrichtlinie erfordert entsprechende Nachricht, wenn nicht eingehalten, ggfs. via Formularvalidierung & Bootstrap?
                 case "auth/weak-password":
                     toastMessage.value = "Ihr Passwort muss mindestens 6 Zeichen lang sein.";
                     break;

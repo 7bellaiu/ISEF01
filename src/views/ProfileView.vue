@@ -26,19 +26,21 @@ onMounted(() => {
         } else {
             userLoggedIn.value = true;
             username.value = user.displayName;
-            currentUsername.value = username.value;
             email.value = user.email;
-            currentEmail.value = email.value;
         }
     });
 });
 
 /** HANDLER */
-// TODO: Handling of Bad HTTP Request after Changing PW from current to curren
 const updateProfile = () => {
-    if (changePassword) {
+    if (changePassword.value) {
         if (newPassword.value !== confirmPassword.value) {
             toastMessage.value = "Die eingegebenen Passwörter stimmen nicht überein!";
+            toastVariant.value = "warning"
+            triggerToast();
+            return;
+        } else if (newPassword.value === currentPassword.value) {
+            toastMessage.value = "Das neue und alte Passwort dürfen nicht identisch sein!";
             toastVariant.value = "warning"
             triggerToast();
             return;
@@ -55,8 +57,9 @@ const updateProfile = () => {
                             handleDiscard();
                         })
                         .catch((updatePasswordError) => {
+                            // Firebase: Missing password requirements: [Password must contain at least 12 characters, Password must contain a numeric character, Password must contain a non-alphanumeric character] (auth/password-does-not-meet-requirements).
                             console.error('updatePasswordError: ', updatePasswordError);
-                            toastMessage.value = updatePasswordError.code;
+                            toastMessage.value = updatePasswordError.message;
                             toastVariant.value = "danger";
                             triggerToast();
                         });
@@ -78,14 +81,23 @@ const updateProfile = () => {
         }
     }
 
-    if (changeProfileData) {
+    if (changeProfileData.value) {
         // TODO: Validierung der Eingaben
         // nichts leer (nach trim)
         // newUsername !== currentUserName
         // newUsername > 5 Zeichen
         // newMail !== invalid && !== currentMail
-        if (false) {
+        if (!currentUsername.value) {
+            currentUsername.value = '';
+        }
+
+        if (!username.value || !email.value) {
+            console.log("Fehler 1");
             //Toast
+        } else if (username.value.trim() === currentUsername.value.trim() || email.value.trim() === currentEmail.value.trim()) {
+            console.log("Fehler 3");
+        } else if (username.value.trim() === '' || email.value.trim() === '') {
+            console.log("Fehler 3");
         } else {
             // TODO: Neue Profildaten übernehmen
         }
@@ -93,17 +105,16 @@ const updateProfile = () => {
 };
 
 const handleChange = () => {
-    // TODO: Eingabe starten und bisherige Werte in Variable speichern
     changeProfileData.value = true;
+    currentUsername.value = username.value;
+    currentEmail.value = email.value;
 };
 
 const handlePassword = () => {
-    // TODO: Eingabe starten
     changePassword.value = true;
 };
 
 const handleDiscard = () => {
-    // TODO: Eingabe abbrechen und Werte zurücksetzen
     changeProfileData.value = false;
     changePassword.value = false;
     username.value = currentUsername.value;
@@ -139,7 +150,7 @@ const triggerToast = () => {
                         </div>
                         <input type="text" class="form-control" id="username" placeholder="Benutzername"
                             aria-label="Benutzername" data-ddg-inputtype="credentials.username" v-model="username"
-                            :disabled="!changeProfileData">
+                            :disabled="!changeProfileData" :required="changeProfileData">
                     </div>
                     <!-- email -->
                     <div class="input-group mb-2">
@@ -151,7 +162,8 @@ const triggerToast = () => {
                             </svg>
                         </div>
                         <input type="email" class="form-control" id="email" placeholder="E-Mail" aria-label="E-Mail"
-                            data-ddg-inputtype="credentials.email" v-model="email" :disabled="!changeProfileData" />
+                            data-ddg-inputtype="credentials.email" v-model="email" :disabled="!changeProfileData"
+                            :required="changeProfileData" />
                     </div>
                     <!-- current password -->
                     <div v-if="changePassword" class="input-group mb-2">
@@ -164,7 +176,8 @@ const triggerToast = () => {
                         </div>
                         <input type="password" class="form-control" id="currentPassword"
                             placeholder="Aktuelles Passwort" aria-label="Aktuelles Passwort"
-                            data-ddg-inputtype="credentials.password.current" v-model="currentPassword" required />
+                            data-ddg-inputtype="credentials.password.current" v-model="currentPassword"
+                            :disabled="!changePassword" :required="changePassword" />
                     </div>
                     <!-- new password -->
                     <div v-if="changePassword && currentPassword.trim() !== ''" class="input-group mb-2">
@@ -177,7 +190,7 @@ const triggerToast = () => {
                         </div>
                         <input type="password" class="form-control" id="newPassword" placeholder="Neues Passwort"
                             aria-label="Neues Passwort" data-ddg-inputtype="credentials.password.new"
-                            v-model="newPassword" />
+                            v-model="newPassword" :disabled="!changePassword" :required="changePassword" />
                     </div>
                     <!-- confirm new password -->
                     <div v-if="changePassword && newPassword.trim() !== ''" class="input-group mb-2">
@@ -190,7 +203,8 @@ const triggerToast = () => {
                         </div>
                         <input type="password" class="form-control" id="confirmPassword"
                             placeholder="Neues Passwort bestätigen" aria-label="Neues Passwort bestätigen"
-                            data-ddg-inputtype="credentials.password.confirmation" v-model="confirmPassword" />
+                            data-ddg-inputtype="credentials.password.confirmation" v-model="confirmPassword"
+                            :disabled="!changePassword" :required="changePassword" />
                     </div>
 
                     <div v-if="changeProfileData || changePassword" class="d-flex justify-content-between mt-3">
