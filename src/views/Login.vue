@@ -64,6 +64,10 @@ const triggerToast = () => {
             <h2 class="mb-3 text-center">Anmelden</h2>
 
             <form @submit.prevent="logIn" class="bg-body-tertiary">
+                <!-- TODO: E-Mail darf nur IU-Mail sein: Eingabefeld nur für den Namen vor dem @, Rest als Dropdown dahinter mit Auswahl zwischen @iubh.de und @iu-study.org 
+                    >Bootstrap: https://getbootstrap.com/docs/5.3/forms/input-group/
+                    >MURAL: https://app.mural.co/t/isef01projektsoftwareenginee6830/m/isef01projektsoftwareenginee6830/1726062842096/b999ebbdc4af2a7aff33a95febf407d379a6e4d7
+                -->
                 <div class="input-group mb-2">
                     <div class="input-group-text" aria-hidden="true">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

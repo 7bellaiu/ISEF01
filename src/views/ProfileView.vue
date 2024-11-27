@@ -1,5 +1,5 @@
 <script setup>
-import { EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
+import { EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, updatePassword, updateProfile, updateEmail } from 'firebase/auth';
 import { onMounted, ref } from 'vue';
 import Toast from "@/components/Toast.vue";
 
@@ -32,85 +32,107 @@ onMounted(() => {
 });
 
 /** HANDLER */
-const updateProfile = () => {
+const updateProfileData = () => {
     if (changePassword.value) {
         if (newPassword.value !== confirmPassword.value) {
             toastMessage.value = "Die eingegebenen Passwörter stimmen nicht überein!";
             toastVariant.value = "warning"
             triggerToast();
             return;
-        } else if (newPassword.value === currentPassword.value) {
+        }
+        if (newPassword.value === currentPassword.value) {
             toastMessage.value = "Das neue und alte Passwort dürfen nicht identisch sein!";
             toastVariant.value = "warning"
             triggerToast();
             return;
-        } else {
-            reauthenticateWithCredential(getAuth().currentUser, EmailAuthProvider.credential(currentEmail.value, currentPassword.value))
-                .then(() => {
-                    console.log('reauthentication succeeded');
-                    updatePassword(getAuth().currentUser, newPassword.value)
-                        .then(() => {
-                            console.log('updatePassword succeeded');
-                            toastMessage.value = 'Das Passwort wurde erfolgreich aktualisiert';
-                            toastVariant.value = "success";
-                            triggerToast();
-                            handleDiscard();
-                        })
-                        .catch((updatePasswordError) => {
-                            // Firebase: Missing password requirements: [Password must contain at least 12 characters, Password must contain a numeric character, Password must contain a non-alphanumeric character] (auth/password-does-not-meet-requirements).
-                            console.error('updatePasswordError: ', updatePasswordError);
-                            toastMessage.value = updatePasswordError.message;
-                            toastVariant.value = "danger";
-                            triggerToast();
-                        });
-                })
-                .catch((reauthenticationError) => {
-                    switch (reauthenticationError.code) {
-                        case 'auth/invalid-credential':
-                            toastMessage.value = 'Das eingegebene aktuelle Passwort ist falsch!';
-                            break;
-
-                        default:
-                            toastMessage.value = reauthenticationError.code;
-                            break;
-                    }
-                    console.error('reauthenticationError: ', reauthenticationError);
-                    toastVariant.value = "danger";
-                    triggerToast();
-                });
         }
+        reauthenticateWithCredential(getAuth().currentUser, EmailAuthProvider.credential(email.value, currentPassword.value))
+            .then(() => {
+                console.log('reauthentication succeeded');
+                updatePassword(getAuth().currentUser, newPassword.value)
+                    .then(() => {
+                        console.log('updatePassword succeeded');
+                        toastMessage.value = 'Das Passwort wurde erfolgreich aktualisiert';
+                        toastVariant.value = "success";
+                        triggerToast();
+                        handleDiscard();
+                    })
+                    .catch((updatePasswordError) => {
+                        switch (reauthenticationError.code) {
+                            case 'auth/password-does-not-meet-requirements':
+                                toastMessage.value = 'Die Passwort-Vorgaben wurden nicht eingehalten: [Password must contain at least 12 characters, Password must contain a numeric character, Password must contain a non-alphanumeric character]';
+                                break;
+
+                            default:
+                                console.error('updatePasswordError: ', updatePasswordError);
+                                toastMessage.value = reauthenticationError.code;
+                                break;
+                        }
+                        toastVariant.value = "danger";
+                        triggerToast();
+                    });
+            })
+            .catch((reauthenticationError) => {
+                switch (reauthenticationError.code) {
+                    case 'auth/invalid-credential':
+                        toastMessage.value = 'Das eingegebene aktuelle Passwort ist falsch!';
+                        break;
+
+                    default:
+                        console.error('reauthenticationError: ', reauthenticationError);
+                        toastMessage.value = reauthenticationError.code;
+                        break;
+                }
+                toastVariant.value = "danger";
+                triggerToast();
+            });
     }
 
     if (changeProfileData.value) {
-        // TODO: Validierung der Eingaben
-        // nichts leer (nach trim)
-        // newUsername !== currentUserName
-        // newUsername > 5 Zeichen
-        // newMail !== invalid && !== currentMail
+        //wegen unsauberen Accounts in Auth
         if (!currentUsername.value) {
             currentUsername.value = '';
         }
-
-        if (!username.value || !email.value) {
-            console.log("Fehler 1");
-            //Toast
-        } else if (username.value.trim() === currentUsername.value.trim() || email.value.trim() === currentEmail.value.trim()) {
-            console.log("Fehler 3");
-        } else if (username.value.trim() === '' || email.value.trim() === '') {
-            console.log("Fehler 3");
-        } else {
-            // TODO: Neue Profildaten übernehmen
+        if (!currentEmail.value) {
+            currentEmail.value = '';
         }
+
+        //Validierung
+        if (username.value.trim() === '' || username.value.length() < 5) {
+            toastMessage.value = "Bitte geben Sie einen gültigen Benutzernamen ein! (mindestens 5 Zeichen)";
+            toastVariant.value = "warning";
+            triggerToast();
+            return;
+        }
+
+        //Username updaten
+        updateProfile(getAuth().currentUser, {
+            displayName: username.value.trim()
+        })
+            .then(() => {
+                //E-Mail updaten + catch-Block
+                // TODO: reauthenticateWithCredential + updateEmail + catchBlock [!] eigentlich deprecated ... stattdessen Email-Wechsel nur per Support-Anfrage?
+                // TODO: gibt eigtl. keinen Mail-Wechsel, weil nur IU-Mails erlaubt => kann weg
+                updateEmail(getAuth().currentUser, email.value)
+            })
+            .catch((profileError) => {
+                console.error('Fehler beim Setzen des Benutzernamens:', profileError);
+                toastMessage.value = "Der Benutzername und die E-Mail konnten nicht geändert werden!";
+                toastVariant.value = "danger";
+                triggerToast();
+            });
+
+
     }
 };
 
 const handleChange = () => {
+    copyCurrentValues();
     changeProfileData.value = true;
-    currentUsername.value = username.value;
-    currentEmail.value = email.value;
 };
 
 const handlePassword = () => {
+    copyCurrentValues();
     changePassword.value = true;
 };
 
@@ -130,6 +152,11 @@ const triggerToast = () => {
         toastRef.value.showToast();
     }
 };
+
+const copyCurrentValues = () => {
+    currentUsername.value = username.value;
+    currentEmail.value = email.value;
+}
 </script>
 
 <template>
@@ -138,7 +165,7 @@ const triggerToast = () => {
             <article class="p-3 mt-3 mb-3" style="width: 100%; max-width: 400px">
                 <h2 class="mb-3 text-center">Mein Profil</h2>
 
-                <form v-if="userLoggedIn" @submit.prevent="updateProfile">
+                <form v-if="userLoggedIn" @submit.prevent="updateProfileData">
                     <!-- username -->
                     <div class="input-group mb-2">
                         <div class="input-group-text" aria-hidden="true">
