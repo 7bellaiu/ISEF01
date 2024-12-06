@@ -1,11 +1,10 @@
 <script setup>
-/** IMPORTS */
 import { ref, onMounted, computed } from "vue";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useRouter } from "vue-router";
 import Toast from "@/components/Toast.vue";
 
-/** COMPONENT REFERENCES */
+/** REFERENCES */
 const router = useRouter();
 const toastRef = ref(null);
 
@@ -15,11 +14,9 @@ const currentPassword = ref("");
 const toastMessage = ref("");
 const toastVariant = ref("");
 const userLoggedIn = ref(false);
-
-//Button enabled/disabled
 const isFormValid = computed(() => email.value.trim() && currentPassword.value.trim());
 
-/** check whether user is logged in when loading this view*/
+/** FUNCTIONS & HANDLERS */
 onMounted(() => {
     onAuthStateChanged(getAuth(), function (user) {
         if (!user) {
@@ -31,8 +28,7 @@ onMounted(() => {
     });
 });
 
-/** HANDLER */
-const logIn = () => {
+const handleLogin = () => {
     signInWithEmailAndPassword(getAuth(), email.value, currentPassword.value)
         .then((data) => {
             console.log("Successfully logged in!", data);
@@ -45,7 +41,6 @@ const logIn = () => {
         });
 };
 
-/** UTILITY */
 const triggerToast = () => {
     if (toastRef.value) {
         toastRef.value.showToast();
@@ -53,18 +48,12 @@ const triggerToast = () => {
 };
 </script>
 
-<!-- TODO: Eigene Komponente Nutzerformular mit Varianten "register", "login" und "userdata" -->
- <!-- NEIN NEIN NEIN -->
 <template>
     <main class="d-flex justify-content-center">
-        <div v-if="!userLoggedIn" class="p-3 mt-3 mb-3" style="width: 100%; max-width: 400px">
+        <div v-if="!userLoggedIn" class="p-3 mt-3 mb-3 form-wrapper">
             <h2 class="mb-3 text-center">Anmelden</h2>
 
-            <form @submit.prevent="logIn" class="bg-body-tertiary">
-                <!-- TODO: E-Mail darf nur IU-Mail sein: Eingabefeld nur für den Namen vor dem @, Rest als Dropdown dahinter mit Auswahl zwischen @iubh.de und @iu-study.org 
-                    >Bootstrap: https://getbootstrap.com/docs/5.3/forms/input-group/
-                    >MURAL: https://app.mural.co/t/isef01projektsoftwareenginee6830/m/isef01projektsoftwareenginee6830/1726062842096/b999ebbdc4af2a7aff33a95febf407d379a6e4d7
-                -->
+            <form @submit.prevent="handleLogin">
                 <div class="input-group mb-2">
                     <div class="input-group-text" aria-hidden="true">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -97,3 +86,10 @@ const triggerToast = () => {
         </div>
     </main>
 </template>
+
+<style scoped>
+.form-wrapper {
+    width: 100%;
+    max-width: 400px;
+}
+</style>
