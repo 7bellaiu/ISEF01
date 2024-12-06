@@ -54,6 +54,7 @@ const triggerToast = () => {
 </script>
 
 <!-- TODO: Eigene Komponente Nutzerformular mit Varianten "register", "login" und "userdata" -->
+ <!-- NEIN NEIN NEIN -->
 <template>
     <main class="d-flex justify-content-center">
         <div v-if="!userLoggedIn" class="p-3 mt-3 mb-3" style="width: 100%; max-width: 400px">
