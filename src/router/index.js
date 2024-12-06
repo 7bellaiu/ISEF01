@@ -3,6 +3,8 @@ import HomeView from "@/views/HomeView.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import QuizzesView from "@/views/QuizzesView.vue";
+import SectionView from "@/views/SectionView.vue";
+import EditQuizView from "@/views/EditQuizView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 
 const router = createRouter({
@@ -32,6 +34,16 @@ const router = createRouter({
             path: "/quizzes",
             name: "quizzes",
             component: QuizzesView
+        },
+        {
+            path: "/section/:moduleid",
+            name: "section",
+            component: SectionView
+        },
+        {
+            path: "/editquiz",
+            name: "editquiz",
+            component: EditQuizView
         }
     ]
 });
