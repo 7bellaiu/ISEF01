@@ -107,7 +107,7 @@ const triggerToast = () => {
 
 <template>
     <main class="d-flex justify-content-center">
-        <div v-if="!userLoggedIn" class="p-3 mt-3 mb-3" style="width: 100%; max-width: 400px">
+        <div v-if="!userLoggedIn" class="p-3 mt-3 mb-3 form-wrapper">
             <h2 class="mb-3 text-center">Registrieren</h2>
 
             <form @submit.prevent="register">
@@ -191,3 +191,10 @@ const triggerToast = () => {
         </div>
     </main>
 </template>
+
+<style scoped>
+.form-wrapper {
+    width: 100%;
+    max-width: 400px;
+}
+</style>

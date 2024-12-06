@@ -1,4 +1,9 @@
 <script setup>
+// TODO: Split in drei Komponenten
+// TODO: DisplayProfileForm als reines Ausgabe-Formular
+import DisplayProfileForm from "@/components/Auth/DisplayProfileForm.vue"
+// TODO: ChangePasswordForm als FOrmular-Kpmonente zur Passwort-Änderung
+// TODO: ChangeUsernameFOrm als FOrmular-Komponente zur Username Änderung
 import { EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, updatePassword, updateProfile, updateEmail } from 'firebase/auth';
 import { onMounted, ref } from 'vue';
 import Toast from "@/components/Toast.vue";
@@ -160,6 +165,30 @@ const copyCurrentValues = () => {
 </script>
 
 <template>
+    <h1>new</h1>
+    <main>
+        <section class="row justify-content-center">
+            <article class="p-3 mt-3 mb-3 form-wrapper">
+                <h2 class="mb-3 text-center">Mein Profil</h2>
+                <DisplayProfileForm />
+                <div v-if="changeProfileData || changePassword" class="d-flex justify-content-between mt-3">
+                    <button @click="handleDiscard" class="btn btn-outline-danger"
+                        :disabled="!changeProfileData && !changePassword">Abbrechen</button>
+                    <button class="btn btn-primary w-50" :disabled="!changeProfileData && !changePassword">Speichern</button>
+                </div>
+                <div v-else class="d-flex justify-content-between mt-3">
+                    <button @click="handlePassword" class="btn btn-secondary" :disabled="changePassword">Passwort
+                        ändern</button>
+                    <button @click="handleChange" class="btn btn-primary" :disabled="changeProfileData">Daten
+                        bearbeiten</button>
+                </div>
+            </article>
+        </section>
+    </main>
+
+
+    <br><br><br>
+    <h1>old</h1>
     <main>
         <section class="row justify-content-center">
             <article class="p-3 mt-3 mb-3" style="width: 100%; max-width: 400px">
@@ -258,3 +287,10 @@ const copyCurrentValues = () => {
         </section>
     </main>
 </template>
+
+<style scoped>
+.form-wrapper {
+    width: 100%;
+    max-width: 400px;
+}
+</style>
