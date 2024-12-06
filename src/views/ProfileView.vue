@@ -46,7 +46,7 @@ const handleCancelEmit = (message) => {
     changeUsername.value = false;
     changePassword.value = false;
     toastMessage.value = message;
-    toastVariant.variant = "warning"
+    toastVariant.value = "warning"
     triggerToast();
 }
 
