@@ -6,7 +6,6 @@ import AppLogo from './AppLogo.vue';
 import LogoutButton from './LogoutButton.vue';
 
 const userLoggedIn = ref(false);
-const userName = ref("");
 
 /** check whether user is logged in when loading this view*/
 onMounted(() => {
@@ -16,7 +15,6 @@ onMounted(() => {
             router.push("/login");
         } else {
             userLoggedIn.value = true;
-            userName.value = user.email;
         }
     });
 });
@@ -27,7 +25,7 @@ onMounted(() => {
         <a href="/">
             <AppLogo variant="dark"/>
         </a>
-        <a href="/" class="text-decoration-none">
+        <a href="/" class="text-decoration-none" id="quizius-maximus">
             <span class="text-white p-1 h2">Quiz<span class="text-primary">iu</span>s Maximus</span>
         </a>
         <div v-if="!userLoggedIn" class="dropdown">
@@ -38,8 +36,8 @@ onMounted(() => {
                 <span class="navbar-toggler-icon"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end  text-center">
-                <li><router-link class="dropdown-item" to="/">Mein Profil</router-link></li>
-                <li><router-link class="dropdown-item" to="/">Quiz starten</router-link></li>
+                <li><router-link class="dropdown-item" to="/profile">Mein Profil</router-link></li>
+                <li><router-link class="dropdown-item" to="/quizzes">Quiz starten</router-link></li>
                 <li><router-link class="dropdown-item" to="/">Hilfe & Kontakt</router-link></li>
                 <li>
                     <hr class="dropdown-divider" />
@@ -52,3 +50,8 @@ onMounted(() => {
     </header>
 </template>
 
+<style scoped>
+#quizius-maximus {
+    font-family: fantasy;
+}
+</style>
