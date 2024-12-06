@@ -1,3 +1,4 @@
+<!-- TODO: Toast so reworken, dass text und farbe hier geregelt, Dauer und ein-/ausblenden in jeweiliger View/component regeln -->
 <script setup>
 import { ref } from 'vue';
 
