@@ -58,14 +58,14 @@ const updateProfileData = () => {
                         handleDiscard();
                     })
                     .catch((updatePasswordError) => {
-                        switch (reauthenticationError.code) {
+                        switch (updatePasswordError.code) {
                             case 'auth/password-does-not-meet-requirements':
                                 toastMessage.value = 'Die Passwort-Vorgaben wurden nicht eingehalten: [Password must contain at least 12 characters, Password must contain a numeric character, Password must contain a non-alphanumeric character]';
                                 break;
 
                             default:
                                 console.error('updatePasswordError: ', updatePasswordError);
-                                toastMessage.value = reauthenticationError.code;
+                                toastMessage.value = updatePasswordError.code;
                                 break;
                         }
                         toastVariant.value = "danger";

@@ -5,13 +5,18 @@ import { useRouter } from "vue-router";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, updateProfile, signOut } from "firebase/auth";
 import Toast from "@/components/Toast.vue";
 
+const DEFAULT_EMAIL_DOMAIN = '@iu-study.org';
+const LEGACY_EMAIL_DOMAIN = '@iubh.de';
+
 /** COMPONENT REFERENCES */
 const router = useRouter();
 const toastRef = ref(null);
 
 /** STATES */
 const username = ref("");
-const email = ref("");
+const newEmailLocalPart = ref("");
+const newEmailDomainPart = ref(DEFAULT_EMAIL_DOMAIN);
+const email = computed(() => `${newEmailLocalPart.value}${newEmailDomainPart.value}`);
 const newPassword = ref("");
 const confirmPassword = ref("");
 const toastMessage = ref("");
@@ -60,10 +65,7 @@ const register = () => {
                 displayName: username.value.trim()
             })
                 .then(() => {
-                    // TODO: rausnehmen? Router pusht sowieso auf '/' ergibt hier also eigtl. keinen Sinn
-                    // toastMessage.value = "Die Registrierung war erfolgreich!";
-                    // toastVariant.value = "success";
-                    // triggerToast();
+                    console.log('updateProfile: success');
                 })
                 .catch((profileError) => {
                     console.error('Fehler beim Setzen des Benutzernamens:', profileError);
@@ -76,16 +78,22 @@ const register = () => {
             // Fehler bei der Registrierung
             switch (error.code) {
                 //TODO: Passwortrichtlinie erfordert entsprechende Nachricht, wenn nicht eingehalten, ggfs. via Formularvalidierung & Bootstrap?
-                case "auth/weak-password":
-                    toastMessage.value = "Ihr Passwort muss mindestens 6 Zeichen lang sein.";
+                case "auth/password-does-not-meet-requirements":
+                    toastMessage.value = 'Die Passwort-Vorgaben wurden nicht eingehalten: [Password must contain at least 12 characters, Password must contain a numeric character, Password must contain a non-alphanumeric character]';
                     break;
-
+                case "auth/invalid-email":
+                    toastMessage.value = 'Das Format der E-Mail ist ungültig!';
+                    break;
+                case "auth/email-already-in-use":
+                    //TODO: Message
+                    break;
                 default:
                     toastMessage.value = error.code;
                     break;
             }
             toastVariant.value = "danger";
             triggerToast();
+            console.error('User creation failed', error);
         });
 };
 
@@ -126,8 +134,12 @@ const triggerToast = () => {
                                 d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
                         </svg>
                     </div>
-                    <input type="email" class="form-control" id="email" placeholder="E-Mail" aria-label="E-Mail"
-                        data-ddg-inputtype="credentials.email" v-model="email" required />
+                    <input type="text" class="form-control" id="email" placeholder="vorname.nachname" aria-label="E-Mail"
+                        data-ddg-inputtype="credentials.email" v-model="newEmailLocalPart" required />
+                    <select class="input-group-text" aria-label="Default select example" v-model="newEmailDomainPart">
+                        <option :value="DEFAULT_EMAIL_DOMAIN" selected>{{ DEFAULT_EMAIL_DOMAIN }}</option>
+                        <option :value="LEGACY_EMAIL_DOMAIN">{{ LEGACY_EMAIL_DOMAIN }}</option>
+                    </select>
                 </div>
                 <div class="input-group mb-2">
                     <div class="input-group-text" aria-hidden="true">

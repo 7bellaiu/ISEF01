@@ -43,8 +43,6 @@ const top3Modules = computed(() => {
         <div class="col-lg-6 col-md-8 mx-auto">
           <h1 class="fw-light">Module</h1>
           <p class="lead text-body-secondary py-3">
-            <!-- 'search' statt 'text' => for screen readers & browser + "x" to clear-->
-            <!-- <input type="search" class="form-control" v-model="search" placeholder="Suchen..."> -->
             <input type="search" class="form-control" v-model="search"
               placeholder="Suche nach einem Modul für ein Quiz..." list="datalistOptions" id="exampleDataList">
             <!-- TODO: Testen mit mehr als 2 bzw. 3 und mehr Modulen -->
@@ -73,7 +71,6 @@ const top3Modules = computed(() => {
             <span class="text-success">
               2er Team
             </span>
-
           </p>
         </div>
       </div>

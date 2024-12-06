@@ -4,7 +4,6 @@ import { ref, onMounted, computed } from "vue";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useRouter } from "vue-router";
 import Toast from "@/components/Toast.vue";
-import AppLogo from "@/components/AppLogo.vue";
 
 /** COMPONENT REFERENCES */
 const router = useRouter();
@@ -36,13 +35,10 @@ onMounted(() => {
 const logIn = () => {
     signInWithEmailAndPassword(getAuth(), email.value, currentPassword.value)
         .then((data) => {
-            // TODO: rausnehmen? Router pusht sowieso auf '/' ergibt hier also eigtl. keinen Sinn
-            //console.log("Successfully logged in!", data);
-            // toastMessage.value = "Login was successfull!";
-            // toastVariant.value = "success";
-            // triggerToast();
+            console.log("Successfully logged in!", data);
         })
         .catch((error) => {
+            console.error("Login failed!", error);
             toastMessage.value = "Login failed!";   //give no information bc hackers
             toastVariant.value = "danger";
             triggerToast();
